@@ -26,9 +26,3 @@ class SpeechToText:
             resp['err'] = 'Hmmm, something went wrong in my head'
 
         return resp
-
-
-stt = SpeechToText()
-while True:
-    resp = stt.listen_and_get_text()
-    print(resp)
