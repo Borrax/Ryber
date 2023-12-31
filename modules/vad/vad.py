@@ -57,7 +57,6 @@ class Vad:
                                  self.FRAME_RATE).item()
 
         if probability > self.VOICE_THRESHOLD:
-            print(probability)
             return True
 
         return False

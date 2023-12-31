@@ -21,8 +21,7 @@ class SpeechToText:
         }
 
         r = self.recognizer
-        # mic = sr.Microphone(sample_rate=self.SAMPLE_RATE,
-        #                     chunk_size=self.CHUNK)
+
         mic = MyMicrophone(
             initial_data_chunk=initial_data_chunk,
             audio_stream=audio_stream,
@@ -30,8 +29,6 @@ class SpeechToText:
             chunk_size=self.CHUNK
         )
         with mic as audio_source:
-            print('Listening')
-            # r.adjust_for_ambient_noise(audio_source)
             try:
                 audio = r.listen(audio_source, timeout=3)
             except sr.WaitTimeoutError:
