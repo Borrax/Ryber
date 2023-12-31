@@ -1,10 +1,10 @@
 import pyaudio
-from vad import Vad
+from modules.vad.vad import Vad
+from modules.stt.speech_to_text import SpeechToText
 
-RECORD_TIME = 0.06
 FRAME_RATE = 16000
 BYTES = pyaudio.paInt16
-CHUNK = int(FRAME_RATE * RECORD_TIME)
+CHUNK = 1024
 
 audio = pyaudio.PyAudio()
 input_stream = audio.open(
@@ -16,6 +16,13 @@ input_stream = audio.open(
 )
 
 
-vad = Vad(RECORD_TIME, FRAME_RATE, CHUNK)
+vad = Vad(FRAME_RATE, CHUNK)
+stt = SpeechToText(
+        sample_rate=FRAME_RATE, chunk=CHUNK
+)
+
 while True:
-    vad.has_voice(input_stream)
+    data = input_stream.read(CHUNK)
+    if vad.is_voice_detected(data):
+        resp = stt.listen_and_get_text(input_stream, data)
+        print(resp)

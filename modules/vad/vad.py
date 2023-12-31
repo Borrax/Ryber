@@ -1,6 +1,6 @@
-import pyaudio
 import numpy as np
 import torch
+import copy
 
 
 class Vad:
@@ -9,19 +9,22 @@ class Vad:
         detection logic
 
         Parameters:
-        - record_time (float|int): The chunk of microphone time
-        (in seconds) recording that will be analyzed
         - frame_rate (int): the number of frames per second,
         either 8000 or 16000,
         - chunk (int): the number of frames per buffer
+
+        Attributes:
+        - VOICE_THRESHOLD (float): A value between 0 and 0.99
+        above which the confidence of the model is enough to
+        say that it has detected voice
     """
 
     ONE_DIV_HALF_INT16 = 1 / 32768
+    VOICE_THRESHOLD = 0.85
 
-    def __init__(self, record_time,
+    def __init__(self,
                  frame_rate,
                  chunk):
-        self.RECORD_TIME = record_time
         self.FRAME_RATE = frame_rate
         self.CHUNK = chunk
 
@@ -39,7 +42,7 @@ class Vad:
 
         return audio_arr
 
-    def has_voice(self, stream):
+    def is_voice_detected(self, data):
         """
             Checks if the audio stream has notable voice
 
@@ -47,14 +50,13 @@ class Vad:
             - stream (PyAudio.Stream): the raw audio stream
             from pyaudio
         """
-        data = stream.read(self.CHUNK)
         audio_int16 = np.frombuffer(data, dtype=np.int16)
         audio_f32 = self.int16_to_float32(audio_int16)
 
         probability = self.model(torch.from_numpy(audio_f32),
                                  self.FRAME_RATE).item()
 
-        if probability > 0.85:
+        if probability > self.VOICE_THRESHOLD:
             print(probability)
             return True
 

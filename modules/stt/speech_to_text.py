@@ -3,12 +3,8 @@ from modules.stt.my_microphone import MyMicrophone
 
 
 class SpeechToText:
-    def __init__(self, pyaudio_module,
-                 pyaudio_instance,
-                 sample_rate, chunk=1024):
+    def __init__(self, sample_rate, chunk=1024):
         self.recognizer = sr.Recognizer()
-        self.pyaudio_module = pyaudio_module
-        self.pyaudio_instance = pyaudio_instance
         self.SAMPLE_RATE = sample_rate
         self.CHUNK = chunk
 
@@ -28,8 +24,6 @@ class SpeechToText:
         # mic = sr.Microphone(sample_rate=self.SAMPLE_RATE,
         #                     chunk_size=self.CHUNK)
         mic = MyMicrophone(
-            self.pyaudio_module,
-            self.pyaudio_instance,
             initial_data_chunk=initial_data_chunk,
             audio_stream=audio_stream,
             sample_rate=self.SAMPLE_RATE,
