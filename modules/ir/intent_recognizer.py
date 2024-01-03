@@ -1,7 +1,11 @@
+import sys
 import json
 import torch
 import numpy as np
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+sys.path.insert(0, '../../')
+from utils.tryexceptdecorator import try_except_builder
 
 
 class IntentReognizer:
@@ -16,12 +20,24 @@ class IntentReognizer:
 
         self.threshold = 0.55
 
-    def build_resp(self, err=None, payload=None):
+    def get_tryexceptdecorator():
+        return try_except_builder(
+            lambda e: IntentReognizer.get_default_error_resp()
+        )
+
+    @staticmethod
+    def get_default_error_resp():
+        return IntentReognizer.build_resp(err="Something went wrong trying to "
+                                          "figure out what you want to do")
+
+    @staticmethod
+    def build_resp(err=None, payload=None):
         return {
             'err': err,
             'payload': payload
         }
 
+    @get_tryexceptdecorator()
     def get_intent(self, text):
         encoded = self.tokenizer(text,
                                  return_tensors='pt',
