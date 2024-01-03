@@ -24,6 +24,7 @@ stt = SpeechToText(
 while True:
     initial_data = input_stream.read(CHUNK)
     if vad.is_voice_detected(initial_data):
+        print('Voice detected')
         resp = stt.listen_and_get_text(input_stream,
                                        initial_data)
         print(resp)
