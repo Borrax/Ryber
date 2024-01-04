@@ -6,7 +6,7 @@ class TryExceptDecorFactory:
     @staticmethod
     def for_methods(fallback_fn):
         """
-            Used for the creation of decorators
+            Used for the creation of the decorator
             for class methods
 
             Parameters:
@@ -16,7 +16,7 @@ class TryExceptDecorFactory:
             raised exception
 
             Returns:
-            - Either the value of the called function that
+            Either the value of the called function that
             the decorator is used for or the fallback_fn's
             return statement
         """

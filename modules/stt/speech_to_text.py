@@ -32,11 +32,11 @@ class SpeechToText:
             try:
                 audio = r.listen(audio_source, timeout=3)
             except sr.WaitTimeoutError:
-                resp['err'] = 'Timed out'
+                resp['err'] = 'Timed out trying to figure what you were saying'
                 return resp
 
         try:
-            resp['text'] = r.recognize_whisper(audio, language="en")
+            resp['text'] = r.recognize_whisper(audio, language="en").strip()
         except sr.UnknownValueError:
             resp['err'] = 'Unable to figure out what you are saying'
         except Exception as e:
