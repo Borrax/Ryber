@@ -1,27 +1,32 @@
-def try_except_builder(fallback_fn):
+class TryExceptDecorFactory:
     """
-        Returns a decorator which wraps a function
-        with try statement and on exception the
-        decorator returns the fallback_fn's return statement
-
-        Parameters:
-        - fallback_fn (Function): The function which value
-        is going to be returned on exception. It must take in
-        as parameter the occured exception object
-
-        Returns:
-        - A decorator that takes in as parameter the function
-        that needs to be decorated and yields the target
-        function on success
+        A factory class with methods that
+        help create tryexcept wrapper decorators
     """
+    @staticmethod
+    def for_methods(fallback_fn):
+        """
+            Used for the creation of decorators
+            for class methods
 
-    def decorator(target_fn):
-        def wrapper(*args, **kwargs):
-            try:
-                return target_fn(*args, **kwargs)
-            except Exception as e:
-                print(e)
-                return fallback_fn(e)
-        return wrapper
+            Parameters:
+            - fallback_fn (Function): Accepts "self" of
+            as the first argument and an exception object
+            as the second. It's call value is returned on
+            raised exception
 
-    return decorator
+            Returns:
+            - Either the value of the called function that
+            the decorator is used for or the fallback_fn's
+            return statement
+        """
+        def decorator(target_fn):
+            def wrapper(self, *args, **kwargs):
+                try:
+                    return target_fn(self, *args, **kwargs)
+                except Exception as e:
+                    print(e)
+                    return fallback_fn(self, e)
+            return wrapper
+
+        return decorator

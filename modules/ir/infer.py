@@ -30,6 +30,3 @@ def get_ir_label(text):
     label_id = np.argmax(probs, axis=-1)
 
     return ids_labels[label_id]
-
-
-print(get_ir_label('Why are there stars in the sky'))

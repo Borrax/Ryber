@@ -1,6 +1,8 @@
 import pyaudio
 from modules.vad.vad import Vad
 from modules.stt.speech_to_text import SpeechToText
+from modules.ir.intent_recognizer import IntentRecognizer
+from utils.response import Response
 
 FRAME_RATE = 16000
 BYTES = pyaudio.paInt16
@@ -20,6 +22,7 @@ vad = Vad(FRAME_RATE, CHUNK)
 stt = SpeechToText(
         sample_rate=FRAME_RATE, chunk=CHUNK
 )
+ir = IntentRecognizer(Response)
 
 while True:
     initial_data = input_stream.read(CHUNK)
@@ -27,4 +30,8 @@ while True:
         print('Voice detected')
         resp = stt.listen_and_get_text(input_stream,
                                        initial_data)
+
+        intent = ir.get_intent(resp['text'])
         print(resp)
+        print(intent)
+
