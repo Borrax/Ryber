@@ -1,7 +1,11 @@
 import urllib
+import os
 from playwright.sync_api import sync_playwright
+from config import ROOT_DIR
+
 # the maximum time a locator can wait before timinout
 TIMEOUT_TIME = 5    # in ms
+SCREENSHOT_PATH = os.path.join(ROOT_DIR, 'assets/temp/search_screenshot.png')
 
 
 def get_info_handler(raw_query):
@@ -21,7 +25,7 @@ def get_info_handler(raw_query):
         page.goto(f'https://google.com/search?q={query}&lr=lang_en')
         page.locator('#W0wltc').click()
         page.wait_for_selector('#rcnt')
-        page.screenshot(path='search_screenshot.png')
+        page.screenshot(path=SCREENSHOT_PATH)
 
         result = get_heading_text(page)
         if result is not None:
@@ -39,23 +43,33 @@ def get_info_handler(raw_query):
 
 def get_heading_text(page):
     selector = '#rso > div:nth-child(2) > div > block-component > div > div.dG2XIf.XzTjhb > div > div > div > div > div.ifM9O > div > div > div > div > div.wDYxhc > div > span > span'
-    # selector = 'div.wDYxhc > div > span > span'
     info_locator = page.locator(selector)
     try:
         return info_locator.inner_text(timeout=TIMEOUT_TIME)
     except Exception:
-        return None
+        pass
+
+    selector = 'div.wDYxhc > div > span > span'
+    info_locators = page.locator(selector).nth(0)
+    try:
+        return info_locators.inner_text(timeout=TIMEOUT_TIME)
+    except Exception:
+        pass
+
+    return None
 
 
 def get_side_info(page):
     selector = '.xGj8Mb > .wDYxhc .kno-rdesc span'
 
-    info_locators = page.locator(selector).all()
+    info_locators = page.locator(selector).nth(0)
     try:
-        return info_locators[0].inner_text(timeout=TIMEOUT_TIME)
+        return info_locators.inner_text(timeout=TIMEOUT_TIME)
     except Exception:
         return None
 
 
 # print(get_info_handler('Tell me about quantum physics.'))
-# print(get_info_handler('who is steve jobs?'))
+# print(get_info_handler('who is bill gates?'))
+# print(get_info_handler('when is bill gates born'))
+# print(get_info_handler('Can you tell me how stars are born?'))

@@ -1,5 +1,7 @@
-.wav
-.mp3
+*.wav
+*.mp3
+
+/assests/temp/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -26,6 +26,7 @@ class AppController:
 
         self.vad = Vad(FRAME_RATE, self.CHUNK)
         self.stt = SpeechToText(
+            Response,
             sample_rate=FRAME_RATE,
             chunk=self.CHUNK
         )
@@ -43,12 +44,11 @@ class AppController:
                     self.input_stream, initial_data)
 
                 print(resp_stt)
-                if resp_stt['err'] is not None \
-                   and self.is_helping:
-                    self.say(resp_stt['err'])
+                if resp_stt['err'] is not None:
+                    self.handle_error(resp_stt['err'])
                     continue
 
-                user_input = resp_stt['text']
+                user_input = resp_stt['payload']
                 input_lower = user_input.lower()
 
                 if 'thank you' in input_lower:
@@ -62,6 +62,11 @@ class AppController:
                 self.is_helping = True
 
                 resp_ir = self.ir.get_intent(user_input)
+
+                if resp_ir['err'] is not None:
+                    self.handle_error(resp_ir['err'])
+                    continue
+
                 to_say = self.handle_intent(
                     resp_ir['payload'], input_lower.replace('nika', '')
                 )
@@ -77,7 +82,7 @@ class AppController:
         if intent == 'get_info':
             return get_info_handler(payload)
 
-        return 'Sorry, haven\'t been programmed' \
+        return 'Sorry, I haven\'t been programmed' \
                ' to answer yet'
 
     def say(self, text):
@@ -86,10 +91,14 @@ class AppController:
             self.tts.play_audio(resp['payload']['audio'])
             return
 
-        resp_err = self.tts.get_speech_audio(resp['err'])
-        if resp_err['err'] is None:
-            self.tts.play_audio(resp_err['payload']['audio'])
-            return
+        self.handle_error(resp['err'])
 
-        print('Something totally went wrong with the tts',
-              resp_err['err'])
+    def handle_error(self, err_msg):
+        if self.is_helping:
+            resp = self.tts.get_speech_audio(err_msg)
+            if resp['payload'] is not None:
+                self.tts.play_audio(resp['payload']['audio'])
+            else:
+                print('Something went wrong with the tts')
+
+        print(err_msg)

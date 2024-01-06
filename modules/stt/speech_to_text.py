@@ -3,10 +3,24 @@ from modules.stt.my_microphone import MyMicrophone
 
 
 class SpeechToText:
-    def __init__(self, sample_rate, chunk=1024):
-        self.recognizer = sr.Recognizer()
+    """
+        Provides a speech to text model interface
+
+        Parameters:
+        - response_class: A static class or instance that
+        has methods that create response objects that this
+        interface interface would return
+        - sample_rate: The sampling rate of the audio stream
+        it will analyze
+        - chunk: The number of bits it will process at a time
+    """
+
+    def __init__(self, response_class,
+                 sample_rate=16000, chunk=1024):
+        self.response = response_class
         self.SAMPLE_RATE = sample_rate
         self.CHUNK = chunk
+        self.recognizer = sr.Recognizer()
 
     def listen_and_get_text(self, audio_stream,
                             initial_data_chunk):
@@ -15,10 +29,7 @@ class SpeechToText:
             returns an object containing error message or
             the saying
         """
-        resp = {
-            'err': None,
-            'text': None
-        }
+        resp = self.response.create()
 
         r = self.recognizer
 
@@ -36,7 +47,7 @@ class SpeechToText:
                 return resp
 
         try:
-            resp['text'] = r.recognize_whisper(audio, language="en").strip()
+            resp['payload'] = r.recognize_whisper(audio, language="en").strip()
         except sr.UnknownValueError:
             resp['err'] = 'Unable to figure out what you are saying'
         except Exception as e:

@@ -1,8 +1,8 @@
 import random
 
 resp_greetings = [
-    'Hi', 'Hello there', 'Nice to hear you',
-    'Hello again', 'Hello', 'What can I do for you?'
+    'Hi', 'Hello there', 'Hey. Nice to hear you',
+    'Hello again', 'Hello', 'Hello. What can I do for you?'
 ]
 
 
