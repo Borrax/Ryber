@@ -14,7 +14,7 @@ class TextToSpeech:
     tryexceptwrapper = TryExceptDecorFactory.for_methods(
         lambda self, e: self.response_class.create(
             err='Something went wrong while trying to'
-                'tell you my thought'
+                ' tell you my thought'
         )
     )
 
@@ -69,9 +69,11 @@ class TextToSpeech:
 
         payload = {
             'audio': audio,
-            'play': lambda: play(audio)
         }
 
         return self.response_class.create(
             payload=payload
         )
+
+    def play_audio(self, audio):
+        play(audio)
