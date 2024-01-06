@@ -88,7 +88,7 @@ class AppController:
 
         resp_err = self.tts.get_speech_audio(resp['err'])
         if resp_err['err'] is None:
-            self.tts.play_audio(resp['payload']['audio'])
+            self.tts.play_audio(resp_err['payload']['audio'])
             return
 
         print('Something totally went wrong with the tts',

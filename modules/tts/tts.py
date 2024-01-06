@@ -75,5 +75,6 @@ class TextToSpeech:
             payload=payload
         )
 
+    @tryexceptwrapper
     def play_audio(self, audio):
         play(audio)
