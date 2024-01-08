@@ -1,14 +1,15 @@
-import sys
 import json
 import torch
 import numpy as np
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
-
-sys.path.insert(0, '../../')
-from utils.tryexceptdecorator import TryExceptDecorFactory
+from modules.utils.tryexceptdecorator import TryExceptDecorFactory
 
 
 class IntentRecognizer:
+    tryexceptwrapper = TryExceptDecorFactory.for_methods(
+        lambda self, e: self.get_default_error_resp()
+    )
+
     def __init__(self, response_class):
         self.tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
         self.model = (AutoModelForSequenceClassification
@@ -21,17 +22,12 @@ class IntentRecognizer:
         with open('./models/ir/intent_types.json', 'r') as intents_json:
             self.intents_info = json.loads(intents_json.read())
 
-    def init_tryexceptdecorator():
-        return TryExceptDecorFactory.for_methods(
-            lambda self, e: self.get_default_error_resp()
-        )
-
     def get_default_error_resp(self):
         return self.response.create(
             err="Something went wrong while trying to "
                 "figure out what you want to do")
 
-    @init_tryexceptdecorator()
+    @tryexceptwrapper
     def get_intent(self, text):
         encoded = self.tokenizer(text,
                                  return_tensors='pt',

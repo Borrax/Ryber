@@ -3,7 +3,7 @@ from modules.vad.vad import Vad
 from modules.stt.speech_to_text import SpeechToText
 from modules.ir.intent_recognizer import IntentRecognizer
 from modules.tts.tts import TextToSpeech
-from utils.response import Response
+from modules.utils.response import Response
 from .greeting_handler import greeting_handler
 from .get_info_handler import get_info_handler
 

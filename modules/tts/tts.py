@@ -6,7 +6,7 @@ from transformers import (SpeechT5ForTextToSpeech,
 from datasets import load_dataset
 from pydub import AudioSegment
 from pydub.playback import play
-from utils.tryexceptdecorator import TryExceptDecorFactory
+from modules.utils.tryexceptdecorator import TryExceptDecorFactory
 from config import ROOT_DIR
 
 
