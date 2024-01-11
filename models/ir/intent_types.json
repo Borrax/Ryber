@@ -1,0 +1,14 @@
+{
+  "intents_ids": {
+    "greeting_casual": 0,
+    "get_date": 1,
+    "get_info": 2,
+    "asking_ryber": 3
+  },
+  "ids_intents": {
+    "0": "greeting_casual",
+    "1": "get_date",
+    "2": "get_info",
+    "3": "asking_ryber"
+  }
+}
