@@ -6,6 +6,7 @@ from transformers import (SpeechT5ForTextToSpeech,
 from datasets import load_dataset
 from pydub import AudioSegment
 from pydub.playback import play
+from pydub.effects import speedup
 from modules.utils.tryexceptdecorator import TryExceptDecorFactory
 from config import ROOT_DIR
 
@@ -19,6 +20,7 @@ class TextToSpeech:
     )
 
     def __init__(self, response_class):
+        self.voice_speed = 1.25
         self.response_class = response_class
         self.output_filepath = os.path.join(ROOT_DIR, 'modules/tts/speech.wav')
         self.device = ('cuda' if torch.cuda.is_available()
@@ -59,13 +61,15 @@ class TextToSpeech:
         sf.write(
             self.output_filepath,
             speech.cpu().numpy(),
-            samplerate=16000
+            samplerate=16000,
         )
 
         audio = AudioSegment.from_file(
             self.output_filepath,
             format='wav'
         )
+
+        audio = speedup(audio, self.voice_speed)
 
         payload = {
             'audio': audio,
