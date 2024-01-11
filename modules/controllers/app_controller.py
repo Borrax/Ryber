@@ -1,3 +1,4 @@
+import re
 import pyaudio
 from modules.vad.vad import Vad
 from modules.stt.speech_to_text import SpeechToText
@@ -49,17 +50,19 @@ class AppController:
                     continue
 
                 user_input = resp_stt['payload']
-                input_lower = user_input.lower()
+                user_input = user_input.lower()
 
-                if 'thank you' in input_lower:
+                if 'thank you' in user_input:
                     self.is_helping = False
                     continue
 
-                if 'nika' not in input_lower \
+                if 'nika' not in user_input \
                         and not self.is_helping:
                     continue
 
                 self.is_helping = True
+                user_input = re.sub(r'(nika)|(nico)', '', user_input)
+                user_input = user_input.strip()
 
                 resp_ir = self.ir.get_intent(user_input)
 
@@ -67,9 +70,15 @@ class AppController:
                     self.handle_error(resp_ir['err'])
                     continue
 
+                print('Intent', resp_ir['payload'])
                 to_say = self.handle_intent(
-                    resp_ir['payload'], input_lower.replace('nika', '')
+                    resp_ir['payload'], user_input
                 )
+
+                if to_say is None:
+                    to_say = 'Hmmm wasn\'t able' \
+                             ' to find what you were' \
+                             ' looking for'
 
                 print(to_say)
 
