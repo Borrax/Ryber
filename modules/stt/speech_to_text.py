@@ -13,13 +13,18 @@ class SpeechToText:
         - sample_rate: The sampling rate of the audio stream
         it will analyze
         - chunk: The number of bits it will process at a time
+
+        Attributes:
+        - TIMEOUT (int): The number of seconds before it will give up listening
     """
 
     def __init__(self, response_class,
                  sample_rate=16000, chunk=1024):
+        self.TIMEOUT = 1.5
         self.response = response_class
         self.SAMPLE_RATE = sample_rate
         self.CHUNK = chunk
+        # an instance of the speech recognizer
         self.recognizer = sr.Recognizer()
 
     def listen_and_get_text(self, audio_stream,
@@ -27,7 +32,12 @@ class SpeechToText:
         """
             Listens through the microphone and after some time
             returns an object containing error message or
-            the saying
+            what has been said
+
+            Parameters:
+            - audio_stream (PyAudio.Stream): The input pyaudio stream
+            - initial_data_chunk: The first chunk of the audio Stream
+            that has been read before if that has happened
         """
         resp = self.response.create()
 
@@ -41,7 +51,10 @@ class SpeechToText:
         )
         with mic as audio_source:
             try:
-                audio = r.listen(audio_source, timeout=3)
+                audio = r.listen(
+                    audio_source, timeout=self.TIMEOU
+
+                )
             except sr.WaitTimeoutError:
                 resp['err'] = 'Timed out trying to figure what you were saying'
                 return resp
