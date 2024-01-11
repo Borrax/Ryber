@@ -52,8 +52,7 @@ class SpeechToText:
         with mic as audio_source:
             try:
                 audio = r.listen(
-                    audio_source, timeout=self.TIMEOU
-
+                    audio_source, timeout=self.TIMEOUT
                 )
             except sr.WaitTimeoutError:
                 resp['err'] = 'Timed out trying to figure what you were saying'
