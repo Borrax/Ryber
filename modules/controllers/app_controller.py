@@ -41,15 +41,16 @@ class AppController:
                 self.CHUNK)
             if self.vad.is_voice_detected(initial_data):
                 print('Voice detected')
+                print('Listening to you...')
                 resp_stt = self.stt.listen_and_get_text(
                     self.input_stream, initial_data)
 
-                print(resp_stt)
                 if resp_stt['err'] is not None:
                     self.handle_error(resp_stt['err'])
                     continue
 
                 user_input = resp_stt['payload']
+                print('You said:', user_input)
                 user_input = user_input.lower()
 
                 if 'thank you' in user_input:
@@ -61,16 +62,18 @@ class AppController:
                     continue
 
                 self.is_helping = True
+
                 user_input = re.sub(r'(nika)|(nico)', '', user_input)
                 user_input = user_input.strip()
 
+                print('Analyzing what you said...')
                 resp_ir = self.ir.get_intent(user_input)
 
                 if resp_ir['err'] is not None:
                     self.handle_error(resp_ir['err'])
                     continue
 
-                print('Intent', resp_ir['payload'])
+                print('Intent: ', resp_ir['payload'])
                 to_say = self.handle_intent(
                     resp_ir['payload'], user_input
                 )
@@ -80,7 +83,7 @@ class AppController:
                              ' to find what you were' \
                              ' looking for'
 
-                print(to_say)
+                print('My response:', to_say)
 
                 self.say(to_say)
 
