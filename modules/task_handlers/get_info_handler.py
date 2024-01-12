@@ -6,7 +6,7 @@ from config import ROOT_DIR
 # the maximum time a locator can wait before timinout
 TIMEOUT_TIME = 5    # in ms
 SCREENSHOT_PATH = os.path.join(
-    ROOT_DIR, 'modules/controllers/temp/search_screenshot.png')
+    ROOT_DIR, 'modules/task_handlers/temp/search_screenshot.png')
 
 
 def get_info_handler(raw_query):

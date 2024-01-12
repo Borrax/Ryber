@@ -5,8 +5,8 @@ from modules.stt.speech_to_text import SpeechToText
 from modules.ir.intent_recognizer import IntentRecognizer
 from modules.tts.tts import TextToSpeech
 from modules.utils.response import Response
-from .greeting_handler import greeting_handler
-from .get_info_handler import get_info_handler
+from modules.task_handlers.task_handlers_controller \
+    import TaskHandlersController
 
 
 class AppController:
@@ -33,6 +33,7 @@ class AppController:
         )
         self.ir = IntentRecognizer(Response)
         self.tts = TextToSpeech(Response)
+        self.tasks_controller = TaskHandlersController()
 
     def listen_actively(self):
         print('Listening...')
@@ -74,7 +75,7 @@ class AppController:
                     continue
 
                 print('Intent: ', resp_ir['payload'])
-                to_say = self.handle_intent(
+                to_say = self.tasks_controller.handle(
                     resp_ir['payload'], user_input
                 )
 
@@ -86,16 +87,6 @@ class AppController:
                 print('My response:', to_say)
 
                 self.say(to_say)
-
-    def handle_intent(self, intent, payload=None):
-        if intent == 'greeting_casual':
-            return greeting_handler()
-
-        if intent == 'get_info':
-            return get_info_handler(payload)
-
-        return 'Sorry, I haven\'t been programmed' \
-               ' to answer yet'
 
     def say(self, text):
         resp = self.tts.get_speech_audio(text)

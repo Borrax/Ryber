@@ -2,7 +2,7 @@
 *.mp3
 
 assets/temp/
-modules/controllers/temp
+modules/task_handlers/temp
 models/ir/*.safetensors
 
 # Byte-compiled / optimized / DLL files
