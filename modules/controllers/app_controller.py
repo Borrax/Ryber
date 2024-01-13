@@ -31,6 +31,7 @@ class AppController:
             sample_rate=FRAME_RATE,
             chunk=self.CHUNK
         )
+
         self.ir = IntentRecognizer(Response)
         self.tts = TextToSpeech(Response)
         self.tasks_controller = TaskHandlersController()

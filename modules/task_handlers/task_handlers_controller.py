@@ -1,5 +1,5 @@
-from greeting_handler import greeting_handler
-from get_info_handler import get_info_handler
+from .greeting_handler import greeting_handler
+from .get_info_handler import get_info_handler
 
 
 class TaskHandlersController:
