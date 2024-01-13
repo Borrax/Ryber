@@ -25,6 +25,7 @@ class AppController:
             input=True
         )
 
+        print('Loading...')
         self.vad = Vad(FRAME_RATE, self.CHUNK)
         self.stt = SpeechToText(
             Response,
