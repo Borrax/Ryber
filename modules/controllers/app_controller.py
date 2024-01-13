@@ -10,10 +10,19 @@ from modules.task_handlers.task_handlers_controller \
 
 
 class AppController:
+    """
+        Orchastrates the different modules of the program
+        amd provides interface to the back-end logic
+    """
+
     def __init__(self):
+        # the number of frames per second
         FRAME_RATE = 16000
+        # the frame width of the audio stream
         BYTES = pyaudio.paInt16
+        # if the app is still trying to help the user
         self.is_helping = False
+        # the size of the audio stream buffer
         self.CHUNK = 1024
 
         self.audio = pyaudio.PyAudio()
@@ -26,18 +35,27 @@ class AppController:
         )
 
         print('Loading...')
+        # voice activity detecion
         self.vad = Vad(FRAME_RATE, self.CHUNK)
+        # speech to text
         self.stt = SpeechToText(
             Response,
             sample_rate=FRAME_RATE,
             chunk=self.CHUNK
         )
 
+        # intent recognition
         self.ir = IntentRecognizer(Response)
+        # text to speech
         self.tts = TextToSpeech(Response)
+        # executes the neccessary tasks given by the user
         self.tasks_controller = TaskHandlersController()
 
     def listen_actively(self):
+        """
+            Listens indefinetely to the user and
+            executes tasks if needed
+        """
         print('Listening...')
         while True:
             initial_data = self.input_stream.read(
@@ -91,6 +109,13 @@ class AppController:
                 self.say(to_say)
 
     def say(self, text):
+        """
+            Says the text to the user
+
+            Paramters:
+            - text (string): The text that needs to be
+            said verbally
+        """
         resp = self.tts.get_speech_audio(text)
         if resp['err'] is None:
             self.tts.play_audio(resp['payload']['audio'])
@@ -99,6 +124,13 @@ class AppController:
         self.handle_error(resp['err'])
 
     def handle_error(self, err_msg):
+        """
+            Does the necessary operations when an error message
+            has occured.
+
+            Parameters:
+            - err_msg (string): The message of the error to e shown
+        """
         if self.is_helping:
             resp = self.tts.get_speech_audio(err_msg)
             if resp['payload'] is not None:
