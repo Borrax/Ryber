@@ -51,62 +51,60 @@ class AppController:
         # executes the neccessary tasks given by the user
         self.tasks_controller = TaskHandlersController()
 
-    def listen_actively(self):
+    def listen(self):
         """
-            Listens indefinetely to the user and
-            executes tasks if needed
+            Listens for the user's input and helps if needed
         """
         print('Listening...')
-        while True:
-            initial_data = self.input_stream.read(
-                self.CHUNK)
-            if self.vad.is_voice_detected(initial_data):
-                print('Voice detected')
-                print('Listening to you...')
-                resp_stt = self.stt.listen_and_get_text(
-                    self.input_stream, initial_data)
+        initial_data = self.input_stream.read(
+            self.CHUNK)
+        if self.vad.is_voice_detected(initial_data):
+            print('Voice detected')
+            print('Listening to you...')
+            resp_stt = self.stt.listen_and_get_text(
+                self.input_stream, initial_data)
 
-                if resp_stt['err'] is not None:
-                    self.handle_error(resp_stt['err'])
-                    continue
+            if resp_stt['err'] is not None:
+                self.handle_error(resp_stt['err'])
+                return
 
-                user_input = resp_stt['payload']
-                print('You said:', user_input)
-                user_input = user_input.lower()
+            user_input = resp_stt['payload']
+            print('You said:', user_input)
+            user_input = user_input.lower()
 
-                if 'thank you' in user_input:
-                    self.is_helping = False
-                    continue
+            if 'thank you' in user_input:
+                self.is_helping = False
+                return
 
-                if 'nika' not in user_input \
-                        and not self.is_helping:
-                    continue
+            if 'nika' not in user_input \
+                    and not self.is_helping:
+                return
 
-                self.is_helping = True
+            self.is_helping = True
 
-                user_input = re.sub(r'(nika)|(nico)', '', user_input)
-                user_input = user_input.strip()
+            user_input = re.sub(r'(nika)|(nico)', '', user_input)
+            user_input = user_input.strip()
 
-                print('Analyzing what you said...')
-                resp_ir = self.ir.get_intent(user_input)
+            print('Analyzing what you said...')
+            resp_ir = self.ir.get_intent(user_input)
 
-                if resp_ir['err'] is not None:
-                    self.handle_error(resp_ir['err'])
-                    continue
+            if resp_ir['err'] is not None:
+                self.handle_error(resp_ir['err'])
+                return
 
-                print('Intent: ', resp_ir['payload'])
-                to_say = self.tasks_controller.handle(
-                    resp_ir['payload'], user_input
-                )
+            print('Intent: ', resp_ir['payload'])
+            to_say = self.tasks_controller.handle(
+                resp_ir['payload'], user_input
+            )
 
-                if to_say is None:
-                    to_say = 'Hmmm wasn\'t able' \
-                             ' to find what you were' \
-                             ' looking for'
+            if to_say is None:
+                to_say = 'Hmmm wasn\'t able' \
+                         ' to find what you were' \
+                         ' looking for'
 
-                print('My response:', to_say)
+            print('My response:', to_say)
 
-                self.say(to_say)
+            self.say(to_say)
 
     def say(self, text):
         """
