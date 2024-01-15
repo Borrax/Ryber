@@ -21,16 +21,16 @@ class ListeningThread(QtCore.QThread):
 
     def run(self):
         print('Listening...')
-        self.signaller.response_signal.emit('Listening...')
+        self.signaller.update_response_text('Listening...')
         while True:
             self.listen_fn()
 
 
 class GUI:
-    def __init__(self, controller):
+    def __init__(self, controller, signaller):
         self.app = QtWidgets.QApplication()
         self.controller = controller
-        self.signaller = AIViewSignaller()
+        self.signaller = signaller
         self.main_window = MainWindow(self.signaller)
         self.main_window.resize(600, 400)
 

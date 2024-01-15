@@ -15,7 +15,10 @@ class AppController:
         amd provides interface to the back-end logic
     """
 
-    def __init__(self):
+    def __init__(self, signaller=None):
+        # a manager for the signals between the controller
+        # and the view
+        self.signaller = signaller
         # the number of frames per second
         FRAME_RATE = 16000
         # the frame width of the audio stream
@@ -58,8 +61,8 @@ class AppController:
         initial_data = self.input_stream.read(
             self.CHUNK)
         if self.vad.is_voice_detected(initial_data):
-            print('Voice detected')
-            print('Listening to you...')
+            self.send_signal('Voice detected')
+            self.send_signal('Listening to you...')
             resp_stt = self.stt.listen_and_get_text(
                 self.input_stream, initial_data)
 
@@ -68,7 +71,7 @@ class AppController:
                 return
 
             user_input = resp_stt['payload']
-            print('You said:', user_input)
+            self.send_signal(user_input)
             user_input = user_input.lower()
 
             if 'thank you' in user_input:
@@ -84,7 +87,7 @@ class AppController:
             user_input = re.sub(r'(nika)|(nico)', '', user_input)
             user_input = user_input.strip()
 
-            print('Analyzing what you said...')
+            self.send_signal('Analyzing what you said...')
             resp_ir = self.ir.get_intent(user_input)
 
             if resp_ir['err'] is not None:
@@ -101,7 +104,7 @@ class AppController:
                          ' to find what you were' \
                          ' looking for'
 
-            print('My response:', to_say)
+            self.send_signal(to_say)
 
             self.say(to_say)
 
@@ -136,3 +139,9 @@ class AppController:
                 print('Something went wrong with the tts')
 
         print(err_msg)
+
+    def send_signal(self, payload):
+        print(payload)
+
+        if self.signaller is not None:
+            self.signaller.update_response_text(payload)
