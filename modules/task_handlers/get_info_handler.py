@@ -1,5 +1,6 @@
 import urllib
 import os
+import re
 from playwright.sync_api import sync_playwright
 from config import ROOT_DIR
 
@@ -44,25 +45,38 @@ def get_info_handler(raw_query):
 
 
 def get_heading_text(page):
-    selector = 'div.wDYxhc > div > span'
-    info_locator = page.locator(selector).all()
     try:
-        return info_locator[0].inner_text(timeout=TIMEOUT_TIME)
-    except Exception:
+        info_container = page.get_by_role('heading').all()
+        info_container = list(filter(
+            lambda el: el.get_attribute('aria-level') == '2',
+            info_container
+        ))[1]
+
+        result = info_container.inner_text(timeout=TIMEOUT_TIME)
+
+        if re.search('[a-zA-Z]', result) is None:
+            return None
+
+        return result
+    except Exception as e:
+        print(e)
         pass
 
     return None
 
 
 def get_side_info(page):
-    container = page.get_by_role('complementary')
-    info_locator = container.locator('span').nth(0)
+    container = page.get_by_role('complementary').all()
+    print(len(container))
+    info_locator = container[0].locator('span')
 
     try:
         return info_locator.inner_text(
             timeout=TIMEOUT_TIME)
     except Exception:
-        return None
+        pass
+
+    return None
 
 
-# print(get_info_handler('when is bill gates born?'))
+# print(get_info_handler('can you tell me something about bill gates?'))
