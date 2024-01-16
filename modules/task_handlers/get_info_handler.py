@@ -30,12 +30,12 @@ def get_info_handler(raw_query):
         page.screenshot(path=SCREENSHOT_PATH)
 
         result = get_heading_text(page)
-        if result is not None:
+        if result is not None or not '':
             browser.close()
             return result
 
         result = get_side_info(page)
-        if result is not None:
+        if result is not None or not '':
             browser.close()
             return result
 
@@ -65,4 +65,4 @@ def get_side_info(page):
         return None
 
 
-# print(get_info_handler('can you tell me something about bill gates'))
+# print(get_info_handler('when is bill gates born?'))
