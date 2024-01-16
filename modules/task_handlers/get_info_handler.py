@@ -31,12 +31,12 @@ def get_info_handler(raw_query):
         page.screenshot(path=SCREENSHOT_PATH)
 
         result = get_heading_text(page)
-        if result is not None or not '':
+        if result is not None and not '':
             browser.close()
             return result
 
         result = get_side_info(page)
-        if result is not None or not '':
+        if result is not None and not '':
             browser.close()
             return result
 
@@ -66,17 +66,21 @@ def get_heading_text(page):
 
 
 def get_side_info(page):
-    container = page.get_by_role('complementary').all()
-    print(len(container))
-    info_locator = container[0].locator('span')
-
     try:
-        return info_locator.inner_text(
-            timeout=TIMEOUT_TIME)
-    except Exception:
+        container = page.get_by_role('complementary').all()
+        container = list(filter(
+            lambda el: el.get_attribute('aria-label') == 'Информация',
+            container
+        ))[0]
+
+        spans = container.locator('span').nth(0)
+        print(spans.inner_text(timeout=TIMEOUT_TIME))
+        return None
+    except Exception as e:
+        print(e)
         pass
 
     return None
 
 
-# print(get_info_handler('can you tell me something about bill gates?'))
+print(get_info_handler('can you tell me something about bill gates?'))
