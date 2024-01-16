@@ -99,7 +99,7 @@ class AppController:
                 resp_ir['payload'], user_input
             )
 
-            if to_say is None:
+            if to_say is None or '':
                 to_say = 'Hmmm wasn\'t able' \
                          ' to find what you were' \
                          ' looking for'
