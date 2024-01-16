@@ -55,11 +55,14 @@ def get_heading_text(page):
 
 
 def get_side_info(page):
-    selector = 'div.wDYxhc span:nth-child(1)'
+    container = page.get_by_role('complementary')
+    info_locator = container.locator('span').nth(0)
 
-    info_locators = page.locator(selector).all()
-    print(len(info_locators))
     try:
-        return info_locators[4].inner_text(timeout=TIMEOUT_TIME)
+        return info_locator.inner_text(
+            timeout=TIMEOUT_TIME)
     except Exception:
         return None
+
+
+# print(get_info_handler('can you tell me something about bill gates'))
