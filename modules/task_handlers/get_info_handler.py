@@ -58,8 +58,7 @@ def get_heading_text(page):
             return None
 
         return result
-    except Exception as e:
-        print(e)
+    except Exception:
         pass
 
     return None
@@ -67,20 +66,11 @@ def get_heading_text(page):
 
 def get_side_info(page):
     try:
-        container = page.get_by_role('complementary').all()
-        container = list(filter(
-            lambda el: el.get_attribute('aria-label') == 'Информация',
-            container
-        ))[0]
+        container = page.locator('[aria-label=\'Информация\']')
 
-        spans = container.locator('span').nth(0)
-        print(spans.inner_text(timeout=TIMEOUT_TIME))
-        return None
-    except Exception as e:
-        print(e)
+        span = container.locator('span').nth(0)
+        return span.inner_text(timeout=TIMEOUT_TIME)
+    except Exception:
         pass
 
     return None
-
-
-print(get_info_handler('can you tell me something about bill gates?'))
