@@ -58,6 +58,7 @@ class AppController:
         """
             Listens for the user's input and helps if needed
         """
+        self.send_signal('Listening...')
         initial_data = self.input_stream.read(
             self.CHUNK)
         if self.vad.is_voice_detected(initial_data):

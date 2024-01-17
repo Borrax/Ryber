@@ -20,8 +20,6 @@ class ListeningThread(QtCore.QThread):
         self.signaller = signaller
 
     def run(self):
-        print('Listening...')
-        self.signaller.update_response_text('Listening...')
         while True:
             self.listen_fn()
 
