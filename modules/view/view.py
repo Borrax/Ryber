@@ -1,7 +1,7 @@
 import sys
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtCore import Signal, Slot, QObject
-from modules.controllers.app_controller import AppController
+from modules.controllers.assistant_controller import AssistantController
 
 
 class AIViewSignaller(QObject):
@@ -24,8 +24,10 @@ class AssistantThread(QtCore.QThread):
         self.signaller = signaller
 
     def run(self):
-        controller = AppController(self.signaller)
+        self.signaller.update_app_loading(True)
+        controller = AssistantController(self.signaller)
 
+        self.signaller.update_app_loading(False)
         while True:
             controller.listen()
 
