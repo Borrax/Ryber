@@ -20,17 +20,25 @@ class AssistantThread(QtCore.QThread):
 
 
 class App:
+    """
+        The class that initializes all the
+        components of the app
+    """
+
     def __init__(self):
         self.app = QtWidgets.QApplication()
         self.signaller = AIViewSignaller()
+        self.assistant_thread = AssistantThread(self.signaller)
 
         self.main_window = MainWindow(
             self.signaller
         )
         self.main_window.resize(600, 400)
-        self.assistant_thread = AssistantThread(self.signaller)
 
     def run(self):
+        """
+            Starts the application
+        """
         self.main_window.show()
         self.assistant_thread.start()
 
