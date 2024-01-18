@@ -20,9 +20,9 @@ class AssistantThread(QtCore.QThread):
 
 
 class App:
-    def __init__(self, signaller):
+    def __init__(self):
         self.app = QtWidgets.QApplication()
-        self.signaller = signaller
+        self.signaller = AIViewSignaller()
 
         self.main_window = MainWindow(
             self.signaller
@@ -38,6 +38,5 @@ class App:
 
 
 if __name__ == '__main__':
-    ui_ai_signaller = AIViewSignaller()
-    app = App(ui_ai_signaller)
+    app = App()
     app.run()
