@@ -20,9 +20,9 @@ class AppController:
         # and the view
         self.signaller = signaller
         # the number of frames per second
-        FRAME_RATE = 16000
+        self.FRAME_RATE = 16000
         # the frame width of the audio stream
-        BYTES = pyaudio.paInt16
+        self.BYTES = pyaudio.paInt16
         # if the app is still trying to help the user
         self.is_helping = False
         # the size of the audio stream buffer
@@ -30,23 +30,21 @@ class AppController:
 
         self.audio = pyaudio.PyAudio()
         self.input_stream = self.audio.open(
-            format=BYTES,
+            format=self.BYTES,
             channels=1,
-            rate=FRAME_RATE,
+            rate=self.FRAME_RATE,
             frames_per_buffer=self.CHUNK,
             input=True
         )
 
-        print('Loading...')
         # voice activity detecion
-        self.vad = Vad(FRAME_RATE, self.CHUNK)
+        self.vad = Vad(self.FRAME_RATE, self.CHUNK)
         # speech to text
         self.stt = SpeechToText(
             Response,
-            sample_rate=FRAME_RATE,
+            sample_rate=self.FRAME_RATE,
             chunk=self.CHUNK
         )
-
         # intent recognition
         self.ir = IntentRecognizer(Response)
         # text to speech
