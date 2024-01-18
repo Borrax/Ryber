@@ -9,7 +9,7 @@ from modules.task_handlers.task_handlers_controller \
     import TaskHandlersController
 
 
-class AppController:
+class AssistantController:
     """
         Orchastrates the different modules of the program
         amd provides interface to the back-end logic
