@@ -6,6 +6,10 @@ from modules.controllers.assistant_controller import AssistantController
 
 
 class AssistantThread(QtCore.QThread):
+    """
+        The thread on which the main assistant
+        logic runs
+    """
     def __init__(self, signaller):
         super().__init__()
         self.signaller = signaller
