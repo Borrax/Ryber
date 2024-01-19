@@ -10,15 +10,20 @@ class AssistantThread(QtCore.QThread):
         The thread on which the main assistant
         logic runs
     """
+
     def __init__(self, signaller):
         super().__init__()
         self.signaller = signaller
 
     def run(self):
+        """
+            The method invoked when the thread is
+            started
+        """
         self.signaller.update_app_loading(True)
         controller = AssistantController(self.signaller)
-
         self.signaller.update_app_loading(False)
+
         while True:
             controller.listen()
 
