@@ -1,5 +1,5 @@
 import sys
-from PySide6 import QtCore, QtWidgets, QtGui
+from PySide6 import QtCore, QtWidgets
 from modules.view.view import MainWindow
 from modules.view.ai_ui_signaller import AIViewSignaller
 from modules.controllers.assistant_controller import AssistantController

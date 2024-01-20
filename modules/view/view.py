@@ -16,10 +16,10 @@ class MainWindow(QtWidgets.QWidget):
         self.signaller.loading_app_signal.connect(self.update_main_loading)
 
         self.main_label = QtWidgets.QLabel(
-            '', alignment=QtCore.Qt.AlignCenter)
+            'Loading...', alignment=QtCore.Qt.AlignCenter)
 
         self.response_label = QtWidgets.QLabel(
-            'Loading...', alignment=QtCore.Qt.AlignCenter
+            '', alignment=QtCore.Qt.AlignCenter
         )
 
         self.layout = QtWidgets.QVBoxLayout(self)
@@ -33,6 +33,7 @@ class MainWindow(QtWidgets.QWidget):
 
         self.resize(600, 400)
         self.setStyleSheet(qss)
+        self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
 
     def addFont(self, path):
         """
