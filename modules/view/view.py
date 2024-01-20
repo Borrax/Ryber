@@ -1,5 +1,5 @@
 import os
-from PySide6 import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets, QtGui
 from PySide6.QtCore import Slot
 
 from config import ROOT_DIR
@@ -8,6 +8,11 @@ from config import ROOT_DIR
 class MainWindow(QtWidgets.QWidget):
     def __init__(self, signaller):
         super().__init__()
+
+        id = QtGui.QFontDatabase.addApplicationFont('./assets/NovaSquare-Regular.ttf')
+        print(id)
+        families = QtGui.QFontDatabase.applicationFontFamilies(id)
+        print(families)
 
         self.signaller = signaller
         self.signaller.response_signal.connect(self.update_response_text)

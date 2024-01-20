@@ -1,4 +1,6 @@
 QWidget {
   background: #161f2e;
   color: white;
+  font-family: 'Nova Square';
+  font-size: 24px;
 }
