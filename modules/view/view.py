@@ -17,17 +17,19 @@ class MainWindow(QtWidgets.QWidget):
             '', alignment=QtCore.Qt.AlignCenter)
 
         self.response_label = QtWidgets.QLabel(
-            '', alignment=QtCore.Qt.AlignCenter
+            'Loading...', alignment=QtCore.Qt.AlignCenter
         )
 
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.main_label)
         self.layout.addWidget(self.response_label)
+
         with open(os.path.join(
             ROOT_DIR, 'modules/view/main_window.qss'), 'r'
         ) as style_file:
             qss = style_file.read()
 
+        self.resize(600, 400)
         self.setStyleSheet(qss)
 
     @Slot(str)

@@ -42,7 +42,6 @@ class App:
         self.main_window = MainWindow(
             self.signaller
         )
-        self.main_window.resize(600, 400)
 
     def run(self):
         """
