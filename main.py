@@ -1,5 +1,5 @@
 import sys
-from PySide6 import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets, QtGui
 from modules.view.view import MainWindow
 from modules.view.ai_ui_signaller import AIViewSignaller
 from modules.controllers.assistant_controller import AssistantController
@@ -49,7 +49,7 @@ class App:
             Starts the application
         """
         self.main_window.show()
-        self.assistant_thread.start()
+        # self.assistant_thread.start()
 
         sys.exit(self.app.exec())
 

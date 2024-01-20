@@ -1,5 +1,8 @@
+import os
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtCore import Slot
+
+from config import ROOT_DIR
 
 
 class MainWindow(QtWidgets.QWidget):
@@ -20,6 +23,12 @@ class MainWindow(QtWidgets.QWidget):
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.main_label)
         self.layout.addWidget(self.response_label)
+        with open(os.path.join(
+            ROOT_DIR, 'modules/view/main_window.qss'), 'r'
+        ) as style_file:
+            qss = style_file.read()
+
+        self.setStyleSheet(qss)
 
     @Slot(str)
     def update_response_text(self, new_text):
