@@ -9,10 +9,7 @@ class MainWindow(QtWidgets.QWidget):
     def __init__(self, signaller):
         super().__init__()
 
-        id = QtGui.QFontDatabase.addApplicationFont('./assets/NovaSquare-Regular.ttf')
-        print(id)
-        families = QtGui.QFontDatabase.applicationFontFamilies(id)
-        print(families)
+        self.addFont('./assets/NovaSquare-Regular.ttf')
 
         self.signaller = signaller
         self.signaller.response_signal.connect(self.update_response_text)
@@ -36,6 +33,19 @@ class MainWindow(QtWidgets.QWidget):
 
         self.resize(600, 400)
         self.setStyleSheet(qss)
+
+    def addFont(self, path):
+        """
+            Adds a font to the GUI database to be
+            used by all the widgets
+
+            Parameters:
+            - path (string): The path to the font file
+        """
+        id = QtGui.QFontDatabase.addApplicationFont(path)
+
+        if id < 0:
+            raise Exception('Couldn\'t load font', path)
 
     @Slot(str)
     def update_response_text(self, new_text):
