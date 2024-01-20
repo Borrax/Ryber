@@ -34,6 +34,7 @@ class MainWindow(QtWidgets.QWidget):
         self.resize(600, 400)
         self.setStyleSheet(qss)
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
+        self.setWindowTitle('N.I.K.A.')
 
     def addFont(self, path):
         """
