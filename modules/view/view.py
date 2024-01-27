@@ -15,7 +15,8 @@ class MainWindow(QtWidgets.QWidget):
         self.signaller.response_signal.connect(self.update_response_text)
         self.signaller.loading_app_signal.connect(self.update_main_loading)
 
-        quit_btn = QtWidgets.QPushButton(self, text='X')
+        quit_btn = QtWidgets.QPushButton(text='X')
+        quit_btn.setObjectName('quit_btn')
 
         self.main_label = QtWidgets.QLabel(
             '', alignment=QtCore.Qt.AlignCenter)
@@ -25,6 +26,7 @@ class MainWindow(QtWidgets.QWidget):
         )
 
         self.layout = QtWidgets.QVBoxLayout(self)
+        self.layout.addWidget(quit_btn, alignment=QtCore.Qt.AlignmentFlag.AlignRight)
         self.layout.addWidget(self.main_label)
         self.layout.addWidget(self.response_label)
 
