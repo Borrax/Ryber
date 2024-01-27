@@ -17,16 +17,16 @@ class MainWindow(QtWidgets.QWidget):
         self.signaller.response_signal.connect(self.update_response_text)
         self.signaller.loading_app_signal.connect(self.update_main_loading)
 
-        quit_btn = QtWidgets.QPushButton(text='X')
-        quit_btn.setObjectName('quit_btn')
-        quit_btn.clicked.connect(self.close_app_window)
+        close_btn = QtWidgets.QPushButton(text='X')
+        close_btn.setObjectName('close_btn')
+        close_btn.clicked.connect(self.close_app_window)
 
         self.main_label = QtWidgets.QLabel('')
 
         self.response_label = QtWidgets.QLabel('')
 
         self.layout = QtWidgets.QVBoxLayout(self)
-        self.layout.addWidget(quit_btn,
+        self.layout.addWidget(close_btn,
                               alignment=alignmentFlag.AlignRight)
         self.layout.addWidget(self.main_label,
                               alignment=alignmentFlag.AlignCenter)
