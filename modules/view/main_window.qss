@@ -4,3 +4,7 @@ QWidget {
   font-family: 'Nova Square';
   font-size: 22px;
 }
+
+QPushButton#close_btn:hover {
+  background: gray;
+}
