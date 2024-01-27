@@ -48,7 +48,7 @@ class App:
             Starts the application
         """
         self.main_window.show()
-        # self.assistant_thread.start()
+        self.assistant_thread.start()
 
         sys.exit(self.app.exec())
 
