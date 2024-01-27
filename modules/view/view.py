@@ -19,6 +19,7 @@ class MainWindow(QtWidgets.QWidget):
 
         quit_btn = QtWidgets.QPushButton(text='X')
         quit_btn.setObjectName('quit_btn')
+        quit_btn.clicked.connect(self.close_app_window)
 
         self.main_label = QtWidgets.QLabel('')
 
@@ -65,3 +66,9 @@ class MainWindow(QtWidgets.QWidget):
             self.main_label.setText('Loading...')
         else:
             self.main_label.setText('N.I.K.A.')
+
+    def close_app_window(self):
+        """
+            Closes the app window
+        """
+        self.close()
