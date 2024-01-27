@@ -20,6 +20,7 @@ class MainWindow(QtWidgets.QWidget):
         close_btn = QtWidgets.QPushButton(text='X')
         close_btn.setObjectName('close_btn')
         close_btn.clicked.connect(self.close_app_window)
+        close_btn.setFixedSize(50, 25)
 
         self.main_label = QtWidgets.QLabel('')
 
