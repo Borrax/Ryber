@@ -6,6 +6,5 @@ QWidget {
 }
 
 QPushButton#quit_btn {
-  height: 20px;
   background: green;
 }

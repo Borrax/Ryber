@@ -4,6 +4,8 @@ from PySide6.QtCore import Slot
 
 from config import ROOT_DIR
 
+alignmentFlag = QtCore.Qt.AlignmentFlag
+
 
 class MainWindow(QtWidgets.QWidget):
     def __init__(self, signaller):
@@ -18,17 +20,17 @@ class MainWindow(QtWidgets.QWidget):
         quit_btn = QtWidgets.QPushButton(text='X')
         quit_btn.setObjectName('quit_btn')
 
-        self.main_label = QtWidgets.QLabel(
-            '', alignment=QtCore.Qt.AlignCenter)
+        self.main_label = QtWidgets.QLabel('')
 
-        self.response_label = QtWidgets.QLabel(
-            '', alignment=QtCore.Qt.AlignCenter
-        )
+        self.response_label = QtWidgets.QLabel('')
 
         self.layout = QtWidgets.QVBoxLayout(self)
-        self.layout.addWidget(quit_btn, alignment=QtCore.Qt.AlignmentFlag.AlignRight)
-        self.layout.addWidget(self.main_label)
-        self.layout.addWidget(self.response_label)
+        self.layout.addWidget(quit_btn,
+                              alignment=alignmentFlag.AlignRight)
+        self.layout.addWidget(self.main_label,
+                              alignment=alignmentFlag.AlignCenter)
+        self.layout.addWidget(self.response_label,
+                              alignment=alignmentFlag.AlignCenter)
 
         with open(os.path.join(
             ROOT_DIR, 'modules/view/main_window.qss'), 'r'
