@@ -15,8 +15,10 @@ class MainWindow(QtWidgets.QWidget):
         self.signaller.response_signal.connect(self.update_response_text)
         self.signaller.loading_app_signal.connect(self.update_main_loading)
 
+        quit_btn = QtWidgets.QPushButton(self, text='X')
+
         self.main_label = QtWidgets.QLabel(
-            'Loading...', alignment=QtCore.Qt.AlignCenter)
+            '', alignment=QtCore.Qt.AlignCenter)
 
         self.response_label = QtWidgets.QLabel(
             '', alignment=QtCore.Qt.AlignCenter
