@@ -4,12 +4,11 @@ from PySide6.QtCore import Slot
 
 from config import ROOT_DIR
 
-alignmentFlag = QtCore.Qt.AlignmentFlag
-
 
 class MainWindow(QtWidgets.QWidget):
     def __init__(self, signaller):
         super().__init__()
+        alignmentFlag = QtCore.Qt.AlignmentFlag
 
         self.addFont('./assets/NovaSquare-Regular.ttf')
 
